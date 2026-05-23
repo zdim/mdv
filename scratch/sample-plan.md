@@ -1,6 +1,6 @@
 # Sample Implementation Plan
 
-A throwaway doc for trying `mdv`. Open this, scroll around, press `enter` on a heading to leave a note. Quit with `q` — your notes land in `sample-plan.notes.md` next to this file.
+A throwaway doc for trying `mdv`. Open this, scroll around, press `enter` on a heading to leave a note. Quit with `q`. Your notes land in `sample-plan.notes.md` next to this file.
 
 ## Overview
 

@@ -53,8 +53,8 @@ const defaultRenderWidth = 80
 // PrewarmRenderer initializes glamour ahead of Bubble Tea taking over stdin,
 // at the width that will actually be used. Termenv probes the terminal on
 // first init by writing to stdout and reading stdin; doing it here prevents
-// that probe from racing with user keystrokes — and matching the prewarm
-// width to the real terminal width avoids a wasteful re-init on first paint.
+// that probe from racing with user keystrokes. Matching the prewarm width to
+// the real terminal width also avoids a wasteful re-init on first paint.
 func PrewarmRenderer(width int) {
 	if width <= 0 {
 		width = defaultRenderWidth

@@ -32,4 +32,4 @@ Should we shard before partitioning?
 Timeline is tight.
 ```
 
-Open the same doc in `mdv` again and your notes load back — keep editing where you left off.
+Open the same doc in `mdv` again and your notes load back. Keep editing where you left off.

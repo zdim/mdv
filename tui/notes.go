@@ -152,7 +152,7 @@ func parseNotesFile(content string) []Note {
 	for _, line := range lines {
 		switch {
 		case strings.HasPrefix(line, "# "):
-			// Document header — ignore.
+			// Document header. Ignore.
 			continue
 		case strings.HasPrefix(line, "## "):
 			flush()

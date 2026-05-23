@@ -87,7 +87,7 @@ func (m *Model) SetInitialSize(width, height int) {
 }
 
 // contentHeight is the height available to the markdown viewport. It excludes
-// the help line at the bottom and — when present — the H2 tab bar + divider
+// the help line at the bottom and (when present) the H2 tab bar + divider
 // at the top.
 func (m Model) contentHeight() int {
 	c := m.height - helpHeight - m.tabBarHeight()
@@ -182,7 +182,7 @@ func (m *Model) rerender() {
 }
 
 // refreshViewport reapplies cursor + note markers and pushes the result into
-// the viewport. Cheap — call after any key that could shift the cursor.
+// the viewport. Cheap; call after any key that could shift the cursor.
 func (m *Model) refreshViewport() {
 	m.viewport.SetContent(applyMarkers(m.rendered, m.headings, m.cursorLine, m.notes))
 }
@@ -273,8 +273,8 @@ func (m Model) handleSearchKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 			m.statusMsg = fmt.Sprintf("no match for %q", m.query)
 			return m, nil
 		}
-		// Prefer the first match at or after the current cursor — feels less
-		// jarring than always snapping back to the top of the doc.
+		// Prefer the first match at or after the current cursor. Less jarring
+		// than always snapping back to the top of the doc.
 		m.matchIdx = 0
 		for i, line := range m.matches {
 			if line >= m.cursorLine {
@@ -357,7 +357,7 @@ func (m Model) moveCursor(delta int) Model {
 
 // gotoLine sets the cursor to a specific line and snaps the viewport so the
 // cursor sits near the top (scrollOff lines below the top edge). Used by
-// jumps — [/], g/G — where the user expects a fresh anchor point, not the
+// jumps ([/], g/G), where the user expects a fresh anchor point, not the
 // "barely move the page" feel of adjustViewportToCursor.
 func (m Model) gotoLine(line int) Model {
 	total := m.lineCount()
@@ -418,7 +418,7 @@ func (m *Model) setViewportY(y int) {
 }
 
 // jumpH2 moves to the prev/next H2 tab. Sub-headings (H3/H4) are reached by
-// scrolling — the cursor still tracks whichever heading is topmost.
+// scrolling; the cursor still tracks whichever heading is topmost.
 func (m Model) jumpH2(delta int) Model {
 	if len(m.h2Indices) == 0 {
 		return m
@@ -458,7 +458,7 @@ func (m Model) activeH2Position() int {
 	return active
 }
 
-// currentHeadingIndex returns the heading the cursor is currently under — the
+// currentHeadingIndex returns the heading the cursor is currently under: the
 // last heading whose line <= cursorLine. -1 means the cursor is above the
 // first heading.
 func (m Model) currentHeadingIndex() int {
