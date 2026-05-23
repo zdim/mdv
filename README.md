@@ -14,7 +14,7 @@ go install github.com/zdim/mdv@latest
 mdv path/to/doc.md
 ```
 
-Notes are written to `<doc>.notes.md` next to the source; delete that file to start fresh. Press `?` in the viewer for the full keybinding reference.
+Notes are written to `<doc>.notes.md` next to the source. Press `?` in the viewer for the full keybinding reference.
 
 ## Notes file format
 
