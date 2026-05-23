@@ -6,6 +6,7 @@ import (
 	"sync"
 
 	"github.com/charmbracelet/glamour"
+	"github.com/charmbracelet/lipgloss"
 )
 
 // ansiRE matches CSI escape sequences emitted by glamour styling so we can
@@ -186,9 +187,59 @@ func locateHeadings(rendered string, sources []sourceHeading) []Heading {
 
 // ExtractHeadings parses source markdown, renders it, and locates each
 // heading's line in the rendered output. Returns both the rendered content and
-// the located headings.
+// the located headings. The rendered content has the literal `#+ ` heading
+// prefixes replaced with a level-distinct left bar so the level reads visually
+// instead of as raw markdown syntax.
 func ExtractHeadings(body string, width int) (string, []Heading) {
 	sources := parseSourceHeadings(body)
 	rendered := renderMarkdown(body, width)
-	return rendered, locateHeadings(rendered, sources)
+	headings := locateHeadings(rendered, sources)
+	rendered = prettifyHeadings(rendered, headings)
+	return rendered, headings
+}
+
+var headingMarkerStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("240"))
+
+// levelMarker returns the prefix substitute for a heading level: a Unicode
+// block character whose visual weight matches the level (H1 heaviest, H4
+// thinnest), in a dim color so it reads as a guide rather than a focus. The
+// styled heading text supplies the actual prominence.
+func levelMarker(level int) string {
+	var g string
+	switch level {
+	case 1:
+		g = "█"
+	case 2:
+		g = "▌"
+	case 3:
+		g = "▎"
+	case 4:
+		g = "▏"
+	default:
+		return "  "
+	}
+	return headingMarkerStyle.Render(g) + " "
+}
+
+// prettifyHeadings strips the literal `#+ ` prefix from every known heading
+// line in the rendered content and prepends a level-distinct bar marker. ANSI
+// styling around the heading text is preserved.
+func prettifyHeadings(content string, headings []Heading) string {
+	if len(headings) == 0 {
+		return content
+	}
+	lines := strings.Split(content, "\n")
+	for _, h := range headings {
+		if h.Line < 0 || h.Line >= len(lines) {
+			continue
+		}
+		prefix := strings.Repeat("#", h.Level) + " "
+		line := lines[h.Line]
+		idx := strings.Index(line, prefix)
+		if idx < 0 {
+			continue
+		}
+		lines[h.Line] = line[:idx] + levelMarker(h.Level) + line[idx+len(prefix):]
+	}
+	return strings.Join(lines, "\n")
 }
