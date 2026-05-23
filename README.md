@@ -32,4 +32,4 @@ Should we shard before partitioning?
 Timeline is tight.
 ```
 
-The format is round-trippable — `mdv` parses it back on next open so you can keep editing.
+Open the same doc in `mdv` again and your notes load back — keep editing where you left off.

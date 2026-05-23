@@ -6,7 +6,7 @@ A markdown viewer for the terminal, designed with agentic workflows in mind: ope
 
 ```sh
 go build ./...   # compile
-go test ./...    # unit tests (notes round-trip + heading paths)
+go test ./...    # unit tests (notes save/reload + heading paths)
 go install .     # install to $GOPATH/bin/mdv
 ```
 
@@ -21,7 +21,7 @@ tui/
   model.go           # Bubble Tea Model + Update + View — cursor, scroll, tabs, search, help
   markdown.go        # parse H1–H6 source headings, glamour render, locate rendered line offsets
   compose.go         # textarea overlay for entering a note
-  notes.go           # NoteStore: round-trippable sibling .notes.md
+  notes.go           # NoteStore: sibling .notes.md, saved on ctrl+s and reloaded on next open
   styles.go          # lipgloss style definitions
 ```
 
@@ -31,7 +31,7 @@ Six files, no `internal/`, no submodules.
 
 **Anchor model.** Notes are anchored by heading path: `Anchor{Path: []string}`. Empty path = document-level. Paths come from walking the H1–H6 source headings and finding ancestors with strictly lower level.
 
-**Sibling file is the source of truth.** `<doc>.notes.md` is markdown, human-readable, round-trippable. There is no separate yaml draft, no clipboard handoff. `formatNotesFile`/`parseNotesFile` are inverses; the test in `notes_test.go` pins this.
+**Sibling file is the source of truth.** `<doc>.notes.md` is plain markdown that `mdv` reads back on next open — the file on disk is also the working draft. No separate yaml store, no clipboard handoff. `formatNotesFile`/`parseNotesFile` are inverses; the test in `notes_test.go` pins this.
 
 **3-column gutter on every line.** `[cursor][note][ ]`. Reserved on every rendered line so cursor motion never shifts content horizontally. Glamour is rendered at `width - gutterWidth` so the gutter doesn't squeeze the content. See `applyMarkers` in `model.go`.
 
